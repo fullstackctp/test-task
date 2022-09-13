@@ -1,15 +1,43 @@
-import { Button } from "@mui/material";
-import { useContext } from "react";
+import { Button, Paper } from "@mui/material";
+import { useContext, useEffect } from "react";
 import { StyleContxt } from "../../Context/styleContext";
-const ButtonComponent = () => {
-  const { button } = useContext(StyleContxt);
+const ButtonComponent = ({ tag, id }) => {
+  const { position } = useContext(StyleContxt);
+  const arrayOfTags = [];
+  useEffect(() => {
+    arrayOfTags.push(tag);
+    arrayOfTags
+      ?.filter((t) => t.id === id)
+      .map((t) => {
+        tag.x = Number(position.x) - 80;
+        tag.y = Number(position.y) - 200;
+      });
+    console.log("tag", tag);
+  }, [tag]);
   return (
-    <Button
-      style={{ color: "red", width: 100 }}
-      onClick={() => alert("button clicked")}
-    >
-      {button}
-    </Button>
+    <>
+      <Paper
+        style={{
+          // width: 300,
+          position: "absolute",
+          marginLeft: tag.x,
+          marginTop: tag.y,
+        }}
+      >
+        {[tag]?.map((tag) => (
+          <Button
+            style={{
+              width: 100,
+              heigth: 150,
+              border: "2px solid",
+            }}
+            onClick={() => alert("button clicked")}
+          >
+            {tag.value === "" ? "Button" : tag.value}
+          </Button>
+        ))}
+      </Paper>
+    </>
   );
 };
 export default ButtonComponent;
