@@ -1,7 +1,8 @@
 import { Button, Dialog, Grid, Typography } from "@mui/material";
 import { nanoid } from "nanoid";
 import Paper from "@mui/material/Paper";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useContext } from "react";
+import { StyleContxt } from "../Context/styleContext";
 import SelectedComponent from "../components";
 const HomeScreen = () => {
   const chooseFromArray = [
@@ -9,13 +10,20 @@ const HomeScreen = () => {
     { tag: "button", name: "Button" },
     { tag: "p", name: "Paragraph" },
   ];
+  const { setPosition } = useContext(StyleContxt);
   const [selectedTag, setSelectedTag] = useState({});
   const [allTag, setAllTag] = useState([]);
   const [showPreview, setShowPreview] = useState(false);
   const settingAlltag = (item) => {
     setSelectedTag(item);
     const data = allTag;
-    data.push({ item, id: nanoid(), value: "" });
+    data.push({
+      item,
+      id: nanoid(),
+      value: "",
+      x: "",
+      y: "",
+    });
     setAllTag(data);
   };
   return (
@@ -27,7 +35,7 @@ const HomeScreen = () => {
       <Grid container>
         <Grid
           item
-          xs={10}
+          xs={9}
           style={{
             margin: (12, 12),
             border: "1px solid",
@@ -37,12 +45,19 @@ const HomeScreen = () => {
         >
           <SelectedComponent tagType={allTag} check={showPreview} />
         </Grid>
-        <Grid item xs={1}>
+        <Grid item xs={2}>
           <Typography>Choose</Typography>
           {chooseFromArray.map((item) => (
             <Fragment key={item.tag}>
               <Paper style={{ padding: (12, 12), marginTop: 12 }}>
-                <Button onClick={() => settingAlltag(item)}>{item.name}</Button>
+                <Button
+                  onClick={() => {
+                    settingAlltag(item);
+                    setPosition({ x: 0, y: 0 });
+                  }}
+                >
+                  {item.name}
+                </Button>
               </Paper>
             </Fragment>
           ))}
@@ -54,8 +69,16 @@ const HomeScreen = () => {
         onClose={() => setShowPreview(false)}
         style={{ margin: (12, 12), border: "1px solid" }}
       >
-        <Button onClick={() => setShowPreview(false)}>Close</Button>
-        <SelectedComponent tagType={allTag} check={showPreview} />
+        <Button
+          onClick={() => {
+            setShowPreview(false);
+          }}
+        >
+          Close
+        </Button>
+        <>
+          <SelectedComponent tagType={allTag} check={showPreview} />
+        </>
       </Dialog>
     </>
   );
