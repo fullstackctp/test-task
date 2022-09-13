@@ -5,6 +5,7 @@ export const StyleProvider = (props) => {
   const [paragraph, setParagraph] = useState("");
   const [button, setButton] = useState("");
   const [input, setInput] = useState("");
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   return (
     <StyleContxt.Provider
       value={{
@@ -16,6 +17,8 @@ export const StyleProvider = (props) => {
         setTitle,
         paragraph,
         setParagraph,
+        position,
+        setPosition,
       }}
     >
       {props.children}
